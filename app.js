@@ -10,9 +10,70 @@ class SportsTracker {
     }
 
     init() {
+        this.setupBackgroundAnimation();
         this.attachEventListeners();
         this.loadGames();
         this.startAutoRefresh();
+        this.initPageNavigation();
+    }
+
+    setupBackgroundAnimation() {
+        const canvas = document.getElementById('backgroundCanvas');
+        if (!canvas) return;
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, window.innerWidth, window.innerHeight);
+        gradient.addColorStop(0, '#1e3a8a');
+        gradient.addColorStop(0.5, '#0f172a');
+        gradient.addColorStop(1, '#1e3a8a');
+        
+        // Animate background
+        let offset = 0;
+        const animate = () => {
+            // Fill with gradient
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add animated particles
+            ctx.fillStyle = 'rgba(14, 165, 233, 0.1)';
+            for (let i = 0; i < 5; i++) {
+                const x = (Math.sin(offset / 100 + i) * canvas.width / 2) + canvas.width / 2;
+                const y = (Math.cos(offset / 150 + i * 2) * canvas.height / 2) + canvas.height / 2;
+                ctx.beginPath();
+                ctx.arc(x, y, 50, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            offset += 0.5;
+            requestAnimationFrame(animate);
+        };
+        animate();
+        
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+
+    initPageNavigation() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const page = e.target.dataset.page;
+                
+                // Update active nav
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                // Update active page
+                document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+                document.getElementById(page + 'Page').classList.add('active');
+            });
+        });
     }
 
     attachEventListeners() {
@@ -37,6 +98,19 @@ class SportsTracker {
             this.currentStatus = e.target.value;
             this.renderGames();
         });
+
+        // Mouse follower
+        this.setupMouseFollower();
+    }
+
+    setupMouseFollower() {
+        const follower = document.getElementById('mouseFollower');
+        follower.classList.add('active');
+        
+        document.addEventListener('mousemove', (e) => {
+            follower.style.left = (e.clientX - 50) + 'px';
+            follower.style.top = (e.clientY - 50) + 'px';
+        });
     }
 
     startAutoRefresh() {
@@ -52,10 +126,20 @@ class SportsTracker {
             // In production, replace with actual API calls
             this.games = this.generateMockGames();
             this.renderGames();
+            this.updateStats();
         } catch (error) {
             console.error('Error loading games:', error);
             this.showNotification('Error loading games', 'warning');
         }
+    }
+
+    updateStats() {
+        const liveGames = this.games.filter(g => g.status === 'live').length;
+        const upcomingGames = this.games.filter(g => g.status === 'upcoming').length;
+        
+        document.getElementById('liveGamesCount').textContent = liveGames;
+        document.getElementById('totalGamesCount').textContent = this.games.length;
+        document.getElementById('upcomingGamesCount').textContent = upcomingGames;
     }
 
     generateMockGames() {
