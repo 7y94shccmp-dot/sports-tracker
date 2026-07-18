@@ -7,38 +7,125 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Interactive Background Canvas -->
+    <canvas id="backgroundCanvas" class="background-canvas"></canvas>
+    
+    <!-- Mouse Follower Effect -->
+    <div id="mouseFollower" class="mouse-follower"></div>
+
     <div class="container">
         <header>
-            <h1>🏆 Live Sports Tracker</h1>
-            <p class="subtitle">Stay updated with live scores and game updates</p>
+            <div class="header-content">
+                <h1>🏆 Live Sports Tracker</h1>
+                <p class="subtitle">Stay updated with live scores and game updates</p>
+                <div class="header-nav">
+                    <button class="nav-link active" data-page="scores">📊 Live Scores</button>
+                    <button class="nav-link" data-page="games">🎮 Mini Games</button>
+                </div>
+            </div>
         </header>
 
-        <nav class="sports-nav">
-            <button class="sport-btn active" data-sport="all">All Sports</button>
-            <button class="sport-btn" data-sport="nfl">🏈 NFL</button>
-            <button class="sport-btn" data-sport="nba">🏀 NBA</button>
-            <button class="sport-btn" data-sport="mlb">⚾ MLB</button>
-            <button class="sport-btn" data-sport="soccer">⚽ Soccer</button>
-            <button class="sport-btn" data-sport="nhl">🏒 NHL</button>
-        </nav>
+        <!-- Live Scores Section -->
+        <div id="scoresPage" class="page-content active">
+            <nav class="sports-nav">
+                <button class="sport-btn active" data-sport="all">All Sports</button>
+                <button class="sport-btn" data-sport="nfl">🏈 NFL</button>
+                <button class="sport-btn" data-sport="nba">🏀 NBA</button>
+                <button class="sport-btn" data-sport="mlb">⚾ MLB</button>
+                <button class="sport-btn" data-sport="soccer">⚽ Soccer</button>
+                <button class="sport-btn" data-sport="nhl">🏒 NHL</button>
+            </nav>
 
-        <div class="filters">
-            <input type="text" id="searchInput" placeholder="Search teams or players..." class="search-box">
-            <select id="statusFilter" class="filter-select">
-                <option value="all">All Status</option>
-                <option value="live">Live Only</option>
-                <option value="upcoming">Upcoming</option>
-                <option value="completed">Completed</option>
-            </select>
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Search teams or players..." class="search-box">
+                <select id="statusFilter" class="filter-select">
+                    <option value="all">All Status</option>
+                    <option value="live">Live Only</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="stats-banner">
+                <div class="stat-item">
+                    <span class="stat-number" id="liveGamesCount">0</span>
+                    <span class="stat-label">Live Games</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalGamesCount">0</span>
+                    <span class="stat-label">Total Games</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="upcomingGamesCount">0</span>
+                    <span class="stat-label">Upcoming</span>
+                </div>
+            </div>
+
+            <div class="games-container" id="gamesContainer">
+                <div class="loading">Loading games...</div>
+            </div>
         </div>
 
-        <div class="games-container" id="gamesContainer">
-            <div class="loading">Loading games...</div>
+        <!-- Mini Games Section -->
+        <div id="gamesPage" class="page-content">
+            <div class="games-hub">
+                <div class="games-intro">
+                    <h2>🎮 Sports Mini Games Hub</h2>
+                    <p>Play fun games while waiting for match updates!</p>
+                </div>
+
+                <div class="games-menu" id="gamesMenu">
+                    <div class="game-card-selector">
+                        <div class="game-preview" data-game="flappy">
+                            <div class="game-icon">⚽</div>
+                            <h3>Flappy Ball</h3>
+                            <p>Navigate the ball through obstacles. Space to jump!</p>
+                            <button class="play-btn" onclick="startFlappyBall()">Play Now</button>
+                        </div>
+
+                        <div class="game-preview" data-game="pong">
+                            <div class="game-icon">🏓</div>
+                            <h3>Pong Battle</h3>
+                            <p>Classic Pong game. Arrow keys to move the paddle.</p>
+                            <button class="play-btn" onclick="startPong()">Play Now</button>
+                        </div>
+
+                        <div class="game-preview" data-game="dunk">
+                            <div class="game-icon">🏀</div>
+                            <h3>Basketball Dunk</h3>
+                            <p>Time your clicks to dunk the ball. Click to jump!</p>
+                            <button class="play-btn" onclick="startDunk()">Play Now</button>
+                        </div>
+
+                        <div class="game-preview" data-game="football">
+                            <div class="game-icon">🏈</div>
+                            <h3>Football Pass</h3>
+                            <p>Catch the flying footballs. Arrow keys to move!</p>
+                            <button class="play-btn" onclick="startFootball()">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Canvas Area -->
+                <div id="gameArea" class="game-area hidden">
+                    <div class="game-header-bar">
+                        <h3 id="gameTitle">Game</h3>
+                        <button class="close-game-btn" onclick="closeGame()">✕ Close</button>
+                    </div>
+                    <canvas id="gameCanvas" class="game-canvas"></canvas>
+                    <div class="game-info">
+                        <span id="gameScore">Score: 0</span>
+                        <span id="gameInstructions"></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="notifications" id="notifications"></div>
     </div>
 
+    <!-- Scripts -->
     <script src="app.js"></script>
+    <script src="games.js"></script>
 </body>
 </html>
