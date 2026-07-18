@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sports Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Live Sports Tracker</h1>
+            <p class="subtitle">Stay updated with live scores and game updates</p>
+        </header>
+
+        <nav class="sports-nav">
+            <button class="sport-btn active" data-sport="all">All Sports</button>
+            <button class="sport-btn" data-sport="nfl">🏈 NFL</button>
+            <button class="sport-btn" data-sport="nba">🏀 NBA</button>
+            <button class="sport-btn" data-sport="mlb">⚾ MLB</button>
+            <button class="sport-btn" data-sport="soccer">⚽ Soccer</button>
+            <button class="sport-btn" data-sport="nhl">🏒 NHL</button>
+        </nav>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Search teams or players..." class="search-box">
+            <select id="statusFilter" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="live">Live Only</option>
+                <option value="upcoming">Upcoming</option>
+                <option value="completed">Completed</option>
+            </select>
+        </div>
+
+        <div class="games-container" id="gamesContainer">
+            <div class="loading">Loading games...</div>
+        </div>
+
+        <div class="notifications" id="notifications"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
